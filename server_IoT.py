@@ -1,9 +1,11 @@
+import sys
+
 from flask import Flask, request
 import json
 import logging
 
-# log = logging.getLogger('werkzeug')
-# log.setLevel(logging.ERROR)
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.DEBUG)
 
 app = Flask(__name__)
 
@@ -23,11 +25,13 @@ def get_data():
 @app.route('/post_data', methods=['POST'])
 def post_data():
     if request.method == 'POST':
-        data = dict(request.form)
+        print(str(request.json).replace("'", '"'), file=sys.stderr)
+        data = json.loads(str(request.json).replace("'", '"'))
         ret_str = "{"
         for k in data:
             ret_str += '"' + k + '":"' + data[k] + '",'
-            print(k, data[k])
+            # print(k, data[k])
+            print(k + ": " + data[k], file=sys.stderr)
         ret_str = ret_str[:-1]
         ret_str += "}"
         return ret_str
@@ -36,6 +40,3 @@ def post_data():
 if __name__ == "__main__":
     # app.run()
     app.run(host='0.0.0.0', port=6000)
-
-
-
