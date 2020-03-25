@@ -24,13 +24,18 @@ def get_data():
 def post_data():
     if request.method == 'POST':
         data = dict(request.form)
+        ret_str = "{"
         for k in data:
+            ret_str += '"' + k + '":"' + data[k] + '",'
             print(k, data[k])
-        return "200"
+        ret_str = ret_str[:-1]
+        ret_str += "}"
+        return ret_str
 
 
 if __name__ == "__main__":
     # app.run()
     app.run(host='0.0.0.0', port=6000)
+
 
 
